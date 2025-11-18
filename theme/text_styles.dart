@@ -1,43 +1,15 @@
 import 'package:flutter/material.dart';
 
 class TextStyles {
-  static const TextStyle tempLarge = TextStyle(
-    fontSize: 72,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    height: 1.0,
-  );
+  static const location = TextStyle(fontSize: 22, fontWeight: FontWeight.w600);
+  static const small = TextStyle(fontSize: 14);
+  static const smallBold = TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
 
-  static const TextStyle location = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
-    color: Colors.white,
-  );
+  static const tempLarge = TextStyle(fontSize: 72, fontWeight: FontWeight.bold);
+  static const condition = TextStyle(fontSize: 18, fontWeight: FontWeight.w500);
 
-  static const TextStyle condition = TextStyle(
-    fontSize: 18,
-    color: Colors.white70,
-  );
+  static const sectionTitle = TextStyle(fontSize: 20, fontWeight: FontWeight.w600);
 
-  static const TextStyle feelsLike = TextStyle(
-    fontSize: 16,
-    color: Colors.white70,
-  );
-
-  static const TextStyle sectionTitle = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    color: Colors.white,
-  );
-
-  static const TextStyle small = TextStyle(
-    fontSize: 14,
-    color: Colors.white70,
-  );
-
-  static const TextStyle smallBold = TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    color: Colors.white,
-  );
+  // ✅ Add this missing style
+  static const feelsLike = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
 }

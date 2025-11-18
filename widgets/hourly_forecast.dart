@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
-import '../data/models/weather_model.dart';
 import 'hourly_item.dart';
+import '../data/models/weather_model.dart';
 
 class HourlyForecast extends StatelessWidget {
   final List<HourlyWeather> hourly;
-  final IconData Function(int) mapIcon;
 
-  const HourlyForecast({super.key, required this.hourly, required this.mapIcon});
+  const HourlyForecast({super.key, required this.hourly});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 120,
-      child: ListView.separated(
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: hourly.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          final h = hourly[index];
-          return HourlyItem(data: h, icon: mapIcon(h.weatherCode));
-        },
+        child: Row(
+          children: hourly
+              .map((h) => Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: HourlyItem(hourly: h),
+          ))
+              .toList(),
+        ),
       ),
     );
   }
