@@ -1,86 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'weather_icons.dart';
+import '../data/models/weather_model.dart';
+import '../theme/text_styles.dart';
 
 class DailyItem extends StatelessWidget {
-  final String date;
-  final double maxTemp;
-  final double minTemp;
-  final String sunrise;
-  final String sunset;
-  final int code; // NEW
+  final DailyWeather data;
+  final IconData icon;
 
-  const DailyItem({
-    super.key,
-    required this.date,
-    required this.maxTemp,
-    required this.minTemp,
-    required this.sunrise,
-    required this.sunset,
-    required this.code,
-  });
+  const DailyItem({super.key, required this.data, required this.icon});
 
-  String dayLabel(String iso) {
+  String _dayLabel(String dateIso) {
     try {
-      final dt = DateTime.parse(iso);
+      final dt = DateTime.parse(dateIso);
       return DateFormat.E().format(dt); // Mon, Tue...
-    } catch (_) {
-      return iso;
+    } catch (e) {
+      return data.date;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final percent = ((maxTemp - minTemp) / (maxTemp + 0.0001)).abs().clamp(0.05, 1.0);
-    final icon = weatherIconForCode(code);
-
+    final ratio = (data.maxTemp / (data.maxTemp + data.minTemp + 1)).clamp(0.05, 0.95);
     return Container(
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(16),
+        color: Colors.white.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(14),
       ),
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       child: Row(
         children: [
-          SizedBox(width: 60, child: Text(dayLabel(date), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-          Image.asset(icon, width: 26, height: 26),
+          SizedBox(width: 64, child: Text(_dayLabel(data.date), style: TextStyles.smallBold)),
+          const SizedBox(width: 8),
+          Icon(icon, color: Colors.white),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
+            child: Stack(
               children: [
-                // track bar
-                Container(
-                  height: 10,
-                  decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(8)),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: percent,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 0),
-                      decoration: BoxDecoration(color: const Color(0xFFFFD54F), borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
+                Container(height: 8, decoration: BoxDecoration(color: Colors.white12, borderRadius: BorderRadius.circular(8))),
+                FractionallySizedBox(
+                  widthFactor: ratio,
+                  child: Container(height: 8, decoration: BoxDecoration(color: Colors.yellowAccent, borderRadius: BorderRadius.circular(8))),
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('${minTemp.toStringAsFixed(0)}°', style: const TextStyle(color: Colors.white70)),
-                    Text('${maxTemp.toStringAsFixed(0)}°', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  ],
-                )
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('🌅 ${sunrise.split('T').length > 1 ? sunrise.split('T')[1] : sunrise}', style: const TextStyle(color: Colors.white70, fontSize: 11)),
-              const SizedBox(height: 6),
-              Text('🌇 ${sunset.split('T').length > 1 ? sunset.split('T')[1] : sunset}', style: const TextStyle(color: Colors.white70, fontSize: 11)),
+              Text('${data.maxTemp.round()}°', style: TextStyles.smallBold),
+              Text('${data.minTemp.round()}°', style: TextStyles.small),
             ],
-          )
+          ),
         ],
       ),
     );

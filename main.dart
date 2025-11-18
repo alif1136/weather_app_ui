@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
-import 'theme/app_colors.dart';
+import 'package:weather_app_ui/theme/text_styles.dart';
+
 
 void main() {
-  runApp(const WeatherApp());
+  runApp(const MyApp());
 }
 
-class WeatherApp extends StatelessWidget {
-  const WeatherApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Open-Meteo Weather',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.gradientBottom,
-        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.transparent,
+        textTheme: const TextTheme(bodyMedium: TextStyles.small),
       ),
       home: const HomeScreen(),
     );
