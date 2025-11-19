@@ -141,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  //Gradient Section..
   Widget build(BuildContext context) {
     final topGradient = const Color(0xFF8EC5FC);
     final bottomGradient = const Color(0xFFE0C3FC);
@@ -164,10 +165,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              /// SEARCH BAR
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 12),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: Row(
                   children: [
                     Container(
@@ -187,13 +187,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: MediaQuery.of(context).size.width * 0.55,
                             child: TextField(
                               controller: _cityCtrl,
-                              style:
-                              const TextStyle(color: Colors.white),
-                              decoration:
-                              const InputDecoration.collapsed(
+                              style: const TextStyle(color: Colors.white),
+                              decoration: const InputDecoration.collapsed(
                                   hintText: "Search Location",
-                                  hintStyle: TextStyle(
-                                      color: Colors.white70)),
+                                  hintStyle: TextStyle(color: Colors.white70)),
                             ),
                           ),
                         ],
@@ -203,8 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ElevatedButton(
                       onPressed: _search,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                        Colors.white.withOpacity(0.18),
+                        backgroundColor: Colors.white.withOpacity(0.18),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
@@ -215,13 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              /// EVERYTHING BELOW IS NOW SCROLLABLE
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 40),
                   child: Column(
                     children: [
-                      /// LOCATION LABEL
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 18, vertical: 6),
@@ -237,7 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      /// MAIN CARD
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 18, vertical: 6),
@@ -246,7 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       const SizedBox(height: 12),
 
-                      /// HOURLY
                       Padding(
                         padding:
                         const EdgeInsets.symmetric(horizontal: 18),
@@ -255,7 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       const SizedBox(height: 14),
 
-                      /// DAILY 10-DAYS
                       Padding(
                         padding:
                         const EdgeInsets.symmetric(horizontal: 18),
@@ -272,8 +263,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ---------------- UI HELPERS ----------------
-
   Widget _buildMainCard(double? todayMax, double? todayMin) {
     return Container(
       padding: const EdgeInsets.all(18),
@@ -285,9 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _weather != null
-                ? _formatDate(_weather!.current.time)
-                : '',
+            _weather != null ? _formatDate(_weather!.current.time) : '',
             style: TextStyles.small.copyWith(color: Colors.white70),
           ),
           const SizedBox(height: 6),
@@ -317,8 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     quarterTurns: 3,
                     child: Text(
                       _weather != null
-                          ? _mapCondition(
-                          _weather!.current.weatherCode)
+                          ? _mapCondition(_weather!.current.weatherCode)
                           : '',
                       style: TextStyles.condition
                           .copyWith(color: Colors.white70),
@@ -369,9 +355,11 @@ class _HomeScreenState extends State<HomeScreen> {
             style:
             TextStyles.sectionTitle.copyWith(color: Colors.white)),
         const SizedBox(height: 10),
+
         Container(
-          height: 110,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          height: 120, // ← increased to avoid cutoff
+          padding:
+          const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.06),
             borderRadius: BorderRadius.circular(18),
@@ -403,7 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style:
             TextStyles.sectionTitle.copyWith(color: Colors.white)),
         const SizedBox(height: 10),
-        if (_weather == null) Container()
+        if (_weather == null)
+          Container()
         else
           Column(
             children: _weather!.daily
@@ -417,11 +406,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // mini widgets
   Widget _statChip(IconData icon, String label) {
     return Container(
-      padding:
-      const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.06),
         borderRadius: BorderRadius.circular(20),
@@ -431,35 +418,40 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(icon, size: 16, color: Colors.white70),
           const SizedBox(width: 8),
           Text(label,
-              style:
-              TextStyles.small.copyWith(color: Colors.white)),
+              style: TextStyles.small.copyWith(color: Colors.white)),
         ],
       ),
     );
   }
 
+  // FIXED HOURLY TILE — NO OVERFLOW
   Widget _hourlyTile(HourlyWeather h) {
     return Container(
       width: 78,
-      padding:
-      const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.04),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // ← overflow fix
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(_formatHour(h.time),
-              style:
-              TextStyles.small.copyWith(color: Colors.white70)),
-          const SizedBox(height: 6),
-          Icon(_mapIcon(h.weatherCode),
-              color: Colors.white, size: 22),
-          const SizedBox(height: 6),
-          Text('${h.temperature.round()}°',
-              style: TextStyles.smallBold
-                  .copyWith(color: Colors.white)),
+          Text(
+            _formatHour(h.time),
+            style: TextStyles.small.copyWith(color: Colors.white70),
+          ),
+          const SizedBox(height: 4),
+          Icon(
+            _mapIcon(h.weatherCode),
+            color: Colors.white,
+            size: 20, // ← slightly smaller
+          ),
+          const SizedBox(height: 4),
+          Text(
+            '${h.temperature.round()}°',
+            style: TextStyles.smallBold.copyWith(color: Colors.white),
+          ),
         ],
       ),
     );
@@ -480,8 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             width: 64,
             child: Text(
-              DateFormat.E()
-                  .format(DateTime.parse(d.date)),
+              DateFormat.E().format(DateTime.parse(d.date)),
               style: TextStyles.small.copyWith(color: Colors.white),
             ),
           ),
@@ -520,8 +511,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyles.smallBold
                       .copyWith(color: Colors.white)),
               Text('${d.minTemp.round()}°',
-                  style: TextStyles.small
-                      .copyWith(color: Colors.white70)),
+                  style:
+                  TextStyles.small.copyWith(color: Colors.white70)),
             ],
           )
         ],
@@ -529,3 +520,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
